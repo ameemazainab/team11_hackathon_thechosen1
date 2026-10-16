@@ -1,2 +1,0 @@
-# team11_hackathon_thechosen1
-codebase for team11_hackathon
