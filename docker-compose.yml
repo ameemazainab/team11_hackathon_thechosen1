@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: chosen
+      POSTGRES_PASSWORD: chosen
+      POSTGRES_DB: chosen_one
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chosen"]
+      interval: 5s
+      retries: 10
+  app:
+    build: .
+    depends_on:
+      db: {condition: service_healthy}
+    ports: ["8000:8000"]
+    environment:
+      APP_ENV: development
+      AUTH_MODE: demo
+      AS_OF_DATE: "2026-10-01"
+      SECRET_KEY: local-compose-secret
+      DATABASE_URL: postgresql://chosen:chosen@db:5432/chosen_one
+volumes:
+  pgdata:
